@@ -1,0 +1,99 @@
+<div class="renta-form">
+  <h1>Calculadora de Renta</h1>
+
+  <mat-form-field class="full-width" appearance="outline">
+    <mat-label class="label-text">Primer Apellido</mat-label>
+    <input matInput type="text" [(ngModel)]="pApellido" placeholder="Primer Apellido" class="label-text">
+    <button *ngIf="pApellido" matSuffix mat-icon-button aria-label="Clear" (click)="pApellido=''">
+      <mat-icon>close</mat-icon>
+    </button>
+  </mat-form-field>
+  <br>
+
+  <mat-form-field class="full-width" appearance="outline">
+    <mat-label class="label-text">Segundo Apellido</mat-label>
+    <input matInput type="text" [(ngModel)]="sApellido" placeholder="Segundo Apellido" class="label-text">
+    <button *ngIf="sApellido" matSuffix mat-icon-button aria-label="Clear" (click)="sApellido=''">
+      <mat-icon>close</mat-icon>
+    </button>
+  </mat-form-field>
+
+  <br>
+
+  <ng-container *ngTemplateOutlet="departamentoSelect"></ng-container>
+
+  <ng-template #departamentoSelect>
+    <mat-form-field class="full-width" appearance="outline">
+      <mat-label class="label-text">Departamento</mat-label>
+      <mat-select [(ngModel)]="departamentoSeleccionado" class="label-text">
+        <mat-option *ngFor="let departamento of selectDepartamento.departamentos" [value]="departamento.value" class="label-text">
+          {{departamento.viewValue}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </ng-template>
+
+  <br>
+
+  <mat-form-field appearance="outline" floatLabel="always" class="salary-width">
+    <mat-label>Salario Mensual</mat-label>
+    <input matInput type="number" class="right-align label-text" placeholder="" [(ngModel)]="salarioNominal">
+    <span matTextPrefix>$&nbsp;</span>
+  </mat-form-field>
+
+  <button mat-raised-button class="calc-button" (click)="calculateRenta(); calcularSalarioNeto()">Calcular
+    Renta</button>
+</div>
+<app-resultado-renta [dataEntrante]="renta"></app-resultado-renta>
+
+<mat-accordion>
+  <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false">
+    <mat-expansion-panel-header>
+      <mat-panel-title class="label-text">
+        Reporte extendido
+      </mat-panel-title>
+      <mat-panel-description class="label-text">
+        Mostrar {{panelOpenState ? 'menos' : 'mas'}}
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+    <div class="label-text">
+      <p>Salario Nominal: ${{salarioNominal.toFixed(2)}}</p>
+      <p>ISS: ${{ISS.toFixed(2)}}</p>
+      <p>AFP: ${{AFP.toFixed(2)}}</p>
+      <p>sobre exedente: ${{sobreExedente.toFixed(2)}}</p>
+      <p>Salario con retenciones: ${{salarioConRetenciones.toFixed(2)}}</p>
+      <p>La renta es: ${{renta.toFixed(2)}}</p>
+      <p>Tu salario neto mensual es de: ${{salarioNeto.toFixed(2)}}</p>
+    </div>
+  </mat-expansion-panel>
+</mat-accordion>
+
+<div class="mat-mdc-form-field table-wraper">
+
+<H2 class="label-text">Tabla de Estado de Empleados </H2>
+
+<table class="label-text ">
+  <thead>
+    <tr class="table-header">
+      <th>Apellidos</th>
+      <th>Salario Nominal</th>
+      <th>ISS</th>
+      <th>AFP</th>
+      <th>Renta</th>
+      <th>Salario Neto</th>
+      <th>Departamento</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let empleado of empleados">
+      <td>{{empleado.apellidos}}</td>
+      <td>{{empleado.salarioNominal}}</td>
+      <td>{{(empleado.ISS).toFixed(2)}}</td>
+      <td>{{(empleado.AFP).toFixed(2)}}</td>
+      <td>{{(empleado.renta).toFixed(2)}}</td>
+      <td>{{(empleado.salarioNeto).toFixed(2)}}</td>
+      <td>{{empleado.departamento}}</td>
+    </tr>
+  </tbody>
+</table>
+</div>
